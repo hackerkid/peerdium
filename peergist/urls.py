@@ -20,7 +20,7 @@ from editor.views import publish, retrieve, home
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('new', home),
+    path('', home),
     path('publish', publish),
     path('<slug:secret_id>', retrieve)
 ]

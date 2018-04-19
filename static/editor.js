@@ -1,9 +1,11 @@
-$( document ).ready(function() {
+$( document ).ready(function () {
     var quill = new Quill('#editor', {
         theme: 'snow'
     });
-    
+
     var client = new WebTorrent();
+    const localstorage_available = typeof (Storage) !== "undefined";
+    const published = window.location.pathname.length >= 32;
 
     $("#post-public-button").on("click", function () {
         var content = quill.getContents();
@@ -17,34 +19,48 @@ $( document ).ready(function() {
                 magnet_link: torrent.magnetURI,
                 csrfmiddlewaretoken: csrf_token,
             };
-            $.post("publish", data, function(response) {
-                console.log(response);
+            $.post("publish", data, function (response) {
                 history.pushState(null, '', response.secret_id);
+                if (localstorage_available) {
+                    localStorage.setItem(response.secret_id, stringified_content);
+                }
             });
         })
     });
 
-    const magnet_link = $("#magnet-holder").data("magnet-link");
-    console.log(magnet_link);
+    if (published) {
+        if (localstorage_available) {
+            const secret_id = window.location.pathname.substring(1);
+            const local_content = localStorage.getItem(secret_id);
+            if (local_content) {
+                var object = JSON.parse(local_content);
+                quill.setContents(object);
+                $("#hearted").hide();
+                return;
+            }
+        }
 
-    var json_file;
-    if (magnet_link) {
-        client.add(magnet_link, function (torrent) {
-            console.log('Client is downloading:', torrent.infoHash)
-            torrent.files.forEach(function (file) {
-                var text;
-                var reader = new FileReader();
-                reader.addEventListener("loadend", function() {
-                    var object = JSON.parse(reader.result);
-                    quill.setContents(object);
-                });
-                
-                file.getBlob(function(err, blob) {
-                    reader.readAsText(blob);
-                });
-                
-            })
-        })
+        const magnet_link = $("#magnet-holder").data("magnet-link");
+        var json_file;
+        if (magnet_link) {
+            client.add(magnet_link, function (torrent) {
+                console.log('Client is downloading:', torrent.infoHash)
+                torrent.files.forEach(function (file) {
+                    var text;
+                    var reader = new FileReader();
+                    reader.addEventListener("loadend", function () {
+                        var object = JSON.parse(reader.result);
+                        quill.setContents(object);
+                    });
+    
+                    file.getBlob(function (err, blob) {
+                        reader.readAsText(blob);
+                    });
+                })
+            });
+        }
+    } else {
+        $("#heart-it").hide();
     }
 
 });
