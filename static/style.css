@@ -2,12 +2,3 @@
     max-height: 700px;
 }
 
-.fa.fa-tag{
-    color: transparent;
-    -webkit-text-stroke-width: 2px;
-    -webkit-text-stroke-color: red;
-  }
-.custom-fa{
-  -webkit-text-stroke-color: blue;
- color:transparent;
- }
