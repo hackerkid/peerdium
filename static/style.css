@@ -2,3 +2,29 @@
     max-height: 700px;
 }
 
+.ql-editor {
+    overflow: hidden;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    font-family: CustomSerif,Georgia,Cambria,'Times New Roman',serif;
+}
+
+.ql-toolbar {
+    z-index: -1;
+}
+
+
+p {
+    font-size: 18px;
+}
+
+h1 {
+    font-weight: 700;
+    font-style: normal;
+    font-size: 32px;
+}
+
+
+
+
+

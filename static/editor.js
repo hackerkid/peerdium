@@ -20,19 +20,17 @@ function get_local_content() {
 function peer_info_updater(torrent) {
     var interval = setInterval(function () {
         console.log(torrent.numPeers);
-        peer_info.num_peers = torrent.numPeers;
+        post_info.num_peers = torrent.numPeers;
     }, 4000)
 };
 
-var heart_section = new Vue({
-    el: '#heart-section',
+var post_info = new Vue({
+    el: "#post-info-section",
     data: {
+        show: true,
         class_name: "",
+        num_peers: 0,
     },
-});
-
-var post_button = new Vue({
-    el: "#post-public-button",
     methods: {
         post_document: function() {
             var content = quill.getContents();
@@ -49,8 +47,10 @@ var post_button = new Vue({
                     history.pushState(null, '', response.secret_id);
                     if (localstorage_available) {
                         localStorage.setItem(response.secret_id, stringified_content);
-                        heart_section.class_name = "fas fa-heart fa-2x";
                     }
+                    post_info.show = false;
+                    post_info.class_name = "fas fa-heart";
+                    quill.enable(false);
                 });
                 peer_info_updater(torrent);
             })
@@ -58,27 +58,21 @@ var post_button = new Vue({
     },
 });
 
-var peer_info = new Vue({
-    el: "#peer-info",
-    data: {
-        num_peers: 0,
-    }
-})
-
 var editor = new Vue({
     el: "#editor",
     mounted() {
-        quill = new Quill('#editor', {
-            theme: 'snow',
+        quill = new Quill('#editor-holder', {
+            theme: 'bubble',
         });
     
         const local_content = get_local_content();
         if (local_content) {
             var object = JSON.parse(local_content);
             quill.setContents(object);
-            heart_section.class_name = "fas fa-heart fa-2x";
+            post_info.class_name = "fas fa-heart";
             quill.enable(false);
             var f = new File([local_content], file_name);
+            post_info.show = false;
             client.seed(f, function (torrent) {
                 console.log('Client is seeding ' + torrent.magnetURI);
                 peer_info_updater(torrent);
@@ -86,6 +80,8 @@ var editor = new Vue({
         } else {
             var json_file;
             if (magnet_link) {
+                post_info.class_name = "far fa-heart";
+                post_info.show = false;
                 client.add(magnet_link, function (torrent) {
                     console.log('Client is downloading:', torrent.infoHash)
                     torrent.files.forEach(function (file) {
@@ -93,7 +89,7 @@ var editor = new Vue({
                         reader.addEventListener("loadend", function () {
                             var object = JSON.parse(reader.result);
                             quill.setContents(object);
-                            heart_section.class_name = "far fa-heart fa-2x";
+                            quill.enable(false);
                         });
         
                         file.getBlob(function (err, blob) {
@@ -102,7 +98,7 @@ var editor = new Vue({
 
                         var interval = setInterval(function () {
                             console.log(torrent.numPeers);
-                            peer_info.num_peers = torrent.numPeers;
+                            post_info.num_peers = torrent.numPeers;
                         }, 4000)
                     })
                 });
