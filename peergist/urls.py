@@ -17,10 +17,12 @@ from django.contrib import admin
 from django.urls import path
 from django.views.generic import TemplateView
 from editor.views import publish, retrieve, home
+from django.conf.urls import include, url
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home),
+    url(r'^accounts/', include('allauth.urls')),
     path('publish', publish),
     path('<slug:secret_id>', retrieve)
 ]

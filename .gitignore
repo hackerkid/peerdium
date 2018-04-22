@@ -107,3 +107,4 @@ bin/
 include/
 local/
 pip-selfcheck.json
+secrets.conf

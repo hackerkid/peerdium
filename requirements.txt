@@ -1,0 +1,17 @@
+certifi==2018.4.16
+chardet==3.0.4
+defusedxml==0.5.0
+Django==2.0.4
+django-allauth==0.35.0
+idna==2.6
+oauthlib==2.0.7
+PyJWT==1.6.1
+python3-openid==3.1.0
+pytz==2018.4
+requests==2.18.4
+requests-oauthlib==0.8.0
+six==1.11.0
+social-auth-app-django==2.1.0
+social-auth-core==1.7.0
+urllib3==1.22
+virtualenv==15.2.0
