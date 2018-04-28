@@ -4,9 +4,7 @@ from django.http import JsonResponse
 from editor.models import Document
 
 def home(request):
-    return render(request, "editor.html", {
-        "magnet_url": "",
-    })
+    return render(request, "editor.html")
 
 def publish(request):
     if request.method == "POST":
@@ -15,10 +13,4 @@ def publish(request):
         return JsonResponse({"secret_id": obj.secret_id})
 
 def retrieve(request, secret_id):
-    try:
-        obj = Document.objects.get(secret_id=secret_id)
-        return render(request, "editor.html", {
-            "magnet_url": obj.magnet_link,
-        })
-    except Document.DoesNotExist:
-        return render(request, "404.html")
+    return render(request, "editor.html")

@@ -27,8 +27,8 @@
           <div id="post-info-section">
             <div class="level">
                 <div class="level-left">
-                    <div class="has-text-danger	">
-                      <i v-bind:class="class_name"></i>
+                    <div id="heart-parent" class="has-text-danger" v-on:click="toogle_heart">
+                      <div v-bind:class="class_name"></div>
                     </div>
                 </div>
                 <div class="level-right">

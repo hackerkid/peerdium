@@ -9,22 +9,14 @@
     font-family: CustomSerif,Georgia,Cambria,'Times New Roman',serif;
 }
 
-.ql-toolbar {
-    z-index: -1;
-}
-
 
 p {
     font-size: 18px;
 }
 
-h1 {
-    font-weight: 700;
-    font-style: normal;
-    font-size: 32px;
+.fa-heart {
+    cursor: pointer;
 }
-
-
 
 
 

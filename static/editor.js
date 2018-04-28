@@ -1,7 +1,17 @@
 const localstorage_available = typeof (Storage) !== "undefined";
 var quill;
 var client = new WebTorrent();
-const magnet_link = $("#magnet-holder").data("magnet-link");
+
+function get_info_hash_from_url() {
+    return window.location.pathname.substring(1);
+}
+
+const info_hash = get_info_hash_from_url();
+var magnet_link;
+if (info_hash) {
+    var template_magnet_link = "magnet:?xt=urn:btih:{{INFO_HASH}}&dn=inetd.c&tr=udp%3A%2F%2Fexodus.desync.com%3A6969&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&tr=wss%3A%2F%2Ftracker.btorrent.xyz&tr=wss%3A%2F%2Ftracker.fastcast.nz&tr=wss%3A%2F%2Ftracker.openwebtorrent.com";
+    magnet_link = template_magnet_link.replace("{{INFO_HASH}}", info_hash)
+}
 var file_name = "hooli";
 
 function is_published() {
@@ -11,7 +21,7 @@ function is_published() {
 function get_local_content() {
     if (is_published()) {
         if (localstorage_available) {
-            const secret_id = window.location.pathname.substring(1);
+            const secret_id = get_info_hash_from_url();
             return localStorage.getItem(secret_id);
         }
     }
@@ -24,6 +34,29 @@ function peer_info_updater(torrent) {
     }, 4000)
 };
 
+function update_heart(class_name) {
+    var heart_div_parent = document.getElementById("heart-parent");
+    while (heart_div_parent.hasChildNodes()) {
+        heart_div_parent.removeChild(heart_div_parent.lastChild);
+    }
+    var heart_div = document.createElement("div");
+    heart_div.className = class_name;
+    heart_div_parent.appendChild(heart_div);
+}
+
+function save_doc() {
+    var content = quill.getContents();
+    var stringified_content = JSON.stringify(content);
+    if (localstorage_available) {
+        localStorage.setItem(get_info_hash_from_url(), stringified_content);
+    }
+}
+
+function remove_doc() {
+    if (localstorage_available) {
+        localStorage.removeItem(get_info_hash_from_url());
+    }
+}
 var post_info = new Vue({
     el: "#post-info-section",
     data: {
@@ -36,24 +69,30 @@ var post_info = new Vue({
             var content = quill.getContents();
             var stringified_content = JSON.stringify(content);
             var f = new File([stringified_content], file_name);
-            var csrf_token = $("#csrf-holder").data("csrf");
             client.seed(f, function (torrent) {
                 console.log('Client is seeding ' + torrent.magnetURI);
-                var data = {
-                    magnet_link: torrent.magnetURI,
-                    csrfmiddlewaretoken: csrf_token,
-                };
-                $.post("publish", data, function (response) {
-                    history.pushState(null, '', response.secret_id);
-                    if (localstorage_available) {
-                        localStorage.setItem(response.secret_id, stringified_content);
-                    }
-                    post_info.show = false;
-                    post_info.class_name = "fas fa-heart";
-                    quill.enable(false);
-                });
+                const secret_id = torrent.infoHash;
+                history.pushState(null, '', secret_id);
+                if (localstorage_available) {
+                    localStorage.setItem(secret_id, stringified_content);
+                }
+                post_info.show = false;
+                post_info.class_name = "fas fa-heart";
+                update_heart(post_info.class_name);
+                quill.enable(false);
                 peer_info_updater(torrent);
             })
+        },
+        toogle_heart: function() {
+            if (post_info.class_name === "fas fa-heart") {
+                post_info.class_name = "far fa-heart";
+                update_heart(post_info.class_name);
+                remove_doc();
+            } else {
+                post_info.class_name = "fas fa-heart";
+                update_heart(post_info.class_name);
+                save_doc();
+            }
         }
     },
 });
