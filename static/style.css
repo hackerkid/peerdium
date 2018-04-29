@@ -1,22 +1,51 @@
-#editor {
-    max-height: 700px;
-}
-
-.ql-editor {
-    overflow: hidden;
-    margin-right: 5px;
-    margin-bottom: 5px;
-    font-family: CustomSerif,Georgia,Cambria,'Times New Roman',serif;
-}
-
-
 p {
     font-size: 18px;
+}
+
+body {
+    color: black;
+    font-family: CustomSerif,Georgia,Cambria,'Times New Roman',serif;
 }
 
 .fa-heart {
     cursor: pointer;
 }
 
+article {
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
 
+#post-public-button {
+    font-family: CustomSansSerif,'Lucida Grande',Arial,sans-serif;
+    font-weight: 600;
+    font-size: 17px;
+    text-decoration: none;
+    border: 2px solid #333;
+    border-radius: 16px;
+    padding: 4px 12px;
+    margin: 0 0 15px;
+    background-color: #fff;
+    cursor: pointer;
+    width: 72px;
+    float: right;
+}
 
+#heart-parent {
+    float: left;
+}
+
+#peer-info {
+    float: right;
+}
+
+.standalone-container {
+    margin: 50px auto;
+    max-width: 720px;
+}
+  
+.ql-editor {
+    height: 100%;
+    overflow: hidden;
+}

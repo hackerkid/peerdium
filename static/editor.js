@@ -3,7 +3,13 @@ var quill;
 var client = new WebTorrent();
 
 function get_info_hash_from_url() {
-    return window.location.pathname.substring(1);
+    url = window.location.pathname.substring(1);
+    return url.slice(0, 40);
+}
+
+function get_key_from_url() {
+    url = window.location.pathname.substring(1);
+    return url.slice(40);
 }
 
 const info_hash = get_info_hash_from_url();
@@ -21,8 +27,12 @@ function is_published() {
 function get_local_content() {
     if (is_published()) {
         if (localstorage_available) {
-            const secret_id = get_info_hash_from_url();
-            return localStorage.getItem(secret_id);
+            const info_hash = get_info_hash_from_url();
+            encryped_content = localStorage.getItem(info_hash);
+            if (encryped_content) {
+                decrypted = CryptoJS.AES.decrypt(encryped_content, get_key_from_url());
+                return decrypted.toString(CryptoJS.enc.Utf8)
+            }
         }
     }
 }
@@ -47,8 +57,10 @@ function update_heart(class_name) {
 function save_doc() {
     var content = quill.getContents();
     var stringified_content = JSON.stringify(content);
+    var key = get_key_from_url();
+    var encrypted_string =  CryptoJS.AES.encrypt(stringified_content, key);
     if (localstorage_available) {
-        localStorage.setItem(get_info_hash_from_url(), stringified_content);
+        localStorage.setItem(get_info_hash_from_url(), encrypted_string);
     }
 }
 
@@ -57,10 +69,21 @@ function remove_doc() {
         localStorage.removeItem(get_info_hash_from_url());
     }
 }
+
+function get_random_key() {
+    var text = "";
+    var possible = "abcdefghijklmnopqrstuvwxyz0123456789";
+    
+    for (var i = 0; i < 10; i++)
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+    
+    return text;
+}
+
 var post_info = new Vue({
     el: "#post-info-section",
     data: {
-        show: true,
+        show_post_button: true,
         class_name: "",
         num_peers: 0,
     },
@@ -68,15 +91,16 @@ var post_info = new Vue({
         post_document: function() {
             var content = quill.getContents();
             var stringified_content = JSON.stringify(content);
-            var f = new File([stringified_content], file_name);
+            var key = get_random_key();
+            var encrypted_string =  CryptoJS.AES.encrypt(stringified_content, key);
+            var f = new File([encrypted_string], file_name);
             client.seed(f, function (torrent) {
-                console.log('Client is seeding ' + torrent.magnetURI);
-                const secret_id = torrent.infoHash;
-                history.pushState(null, '', secret_id);
-                if (localstorage_available) {
-                    localStorage.setItem(secret_id, stringified_content);
-                }
-                post_info.show = false;
+                console.log('Client is seeding ' + torrent.infoHash.length);
+                const new_info_hash = torrent.infoHash;
+                var url = new_info_hash + key;
+                history.pushState(null, '', url);
+                save_doc();
+                post_info.show_post_button = false;
                 post_info.class_name = "fas fa-heart";
                 update_heart(post_info.class_name);
                 quill.enable(false);
@@ -100,9 +124,10 @@ var post_info = new Vue({
 var editor = new Vue({
     el: "#editor",
     mounted() {
-        quill = new Quill('#editor-holder', {
+        quill = new Quill('#editor', {
             theme: 'bubble',
         });
+
     
         const local_content = get_local_content();
         if (local_content) {
@@ -110,8 +135,10 @@ var editor = new Vue({
             quill.setContents(object);
             post_info.class_name = "fas fa-heart";
             quill.enable(false);
-            var f = new File([local_content], file_name);
-            post_info.show = false;
+            var key = get_key_from_url();
+            var encrypted_string =  CryptoJS.AES.encrypt(local_content, key);
+            var f = new File([encrypted_string], file_name);
+            post_info.show_post_button = false;
             client.seed(f, function (torrent) {
                 console.log('Client is seeding ' + torrent.magnetURI);
                 peer_info_updater(torrent);
@@ -119,16 +146,18 @@ var editor = new Vue({
         } else {
             var json_file;
             if (magnet_link) {
+                quill.enable(false);
                 post_info.class_name = "far fa-heart";
-                post_info.show = false;
+                post_info.show_post_button = false;
+                console.log(magnet_link)
                 client.add(magnet_link, function (torrent) {
                     console.log('Client is downloading:', torrent.infoHash)
                     torrent.files.forEach(function (file) {
                         var reader = new FileReader();
                         reader.addEventListener("loadend", function () {
-                            var object = JSON.parse(reader.result);
+                            var decrypted_content = CryptoJS.AES.decrypt(reader.result, get_key_from_url());
+                            var object = JSON.parse(decrypted_content.toString(CryptoJS.enc.Utf8));
                             quill.setContents(object);
-                            quill.enable(false);
                         });
         
                         file.getBlob(function (err, blob) {
@@ -141,6 +170,8 @@ var editor = new Vue({
                         }, 4000)
                     })
                 });
+            } else {
+                quill.focus();
             }
         }
     },
