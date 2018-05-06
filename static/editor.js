@@ -1,6 +1,7 @@
 const localstorage_available = typeof (Storage) !== "undefined";
 var quill;
 var client = new WebTorrent();
+var encryped_content;
 
 function get_info_hash_from_url() {
     url = window.location.pathname.substring(1);
@@ -24,7 +25,7 @@ function is_published() {
     return window.location.pathname.length >= 32;
 }
 
-function get_local_content() {
+function get_local_decrypted_content() {
     if (is_published()) {
         if (localstorage_available) {
             const info_hash = get_info_hash_from_url();
@@ -37,9 +38,19 @@ function get_local_content() {
     }
 }
 
+
+function get_local_encrypted_content() {
+    if (is_published()) {
+        if (localstorage_available) {
+            const info_hash = get_info_hash_from_url();
+            encryped_content = localStorage.getItem(info_hash);
+            return encryped_content;
+        }
+    }
+}
+
 function peer_info_updater(torrent) {
     var interval = setInterval(function () {
-        console.log(torrent.numPeers);
         post_info.num_peers = torrent.numPeers;
     }, 4000)
 };
@@ -55,12 +66,8 @@ function update_heart(class_name) {
 }
 
 function save_doc() {
-    var content = quill.getContents();
-    var stringified_content = JSON.stringify(content);
-    var key = get_key_from_url();
-    var encrypted_string =  CryptoJS.AES.encrypt(stringified_content, key);
     if (localstorage_available) {
-        localStorage.setItem(get_info_hash_from_url(), encrypted_string);
+        localStorage.setItem(get_info_hash_from_url(), encryped_content);
     }
 }
 
@@ -93,12 +100,15 @@ var post_info = new Vue({
             var stringified_content = JSON.stringify(content);
             var key = get_random_key();
             var encrypted_string =  CryptoJS.AES.encrypt(stringified_content, key);
+            console.log("first encrypted string " + encrypted_string);
+            console.log("first encrypted file name " + file_name);
             var f = new File([encrypted_string], file_name);
             client.seed(f, function (torrent) {
-                console.log('Client is seeding ' + torrent.infoHash.length);
+                console.log('Client is seeding from editor' + torrent.infoHash);
                 const new_info_hash = torrent.infoHash;
                 var url = new_info_hash + key;
                 history.pushState(null, '', url);
+                encryped_content = encrypted_string;
                 save_doc();
                 post_info.show_post_button = false;
                 post_info.class_name = "fas fa-heart";
@@ -129,18 +139,22 @@ var editor = new Vue({
         });
 
     
-        const local_content = get_local_content();
+        const local_content = get_local_decrypted_content();
         if (local_content) {
             var object = JSON.parse(local_content);
             quill.setContents(object);
             post_info.class_name = "fas fa-heart";
             quill.enable(false);
-            var key = get_key_from_url();
-            var encrypted_string =  CryptoJS.AES.encrypt(local_content, key);
+            var encrypted_string = get_local_encrypted_content();
             var f = new File([encrypted_string], file_name);
+            console.log("--------------")
+            console.log(encrypted_string + " enc")
+            console.log(file_name + " filename")
+            console.log(local_content)
+            console.log("----------------")
             post_info.show_post_button = false;
             client.seed(f, function (torrent) {
-                console.log('Client is seeding ' + torrent.magnetURI);
+                console.log('Client is seeding from local storage ' + torrent.infoHash);
                 peer_info_updater(torrent);
             });
         } else {
@@ -155,6 +169,7 @@ var editor = new Vue({
                     torrent.files.forEach(function (file) {
                         var reader = new FileReader();
                         reader.addEventListener("loadend", function () {
+                            encryped_content = reader.result;
                             var decrypted_content = CryptoJS.AES.decrypt(reader.result, get_key_from_url());
                             var object = JSON.parse(decrypted_content.toString(CryptoJS.enc.Utf8));
                             quill.setContents(object);

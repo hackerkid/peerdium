@@ -20,24 +20,29 @@ article {
 #post-public-button {
     font-family: CustomSansSerif,'Lucida Grande',Arial,sans-serif;
     font-weight: 600;
+    font-style: normal;
     font-size: 17px;
+    color: #000;
     text-decoration: none;
     border: 2px solid #333;
     border-radius: 16px;
+    text-transform: uppercase;
     padding: 4px 12px;
-    margin: 0 0 15px;
     background-color: #fff;
     cursor: pointer;
-    width: 72px;
+    z-index: 900;    
+    position: relative;
     float: right;
 }
 
 #heart-parent {
     float: left;
+    position: relative;
 }
 
 #peer-info {
     float: right;
+    position: relative;
 }
 
 .standalone-container {
@@ -48,4 +53,10 @@ article {
 .ql-editor {
     height: 100%;
     overflow: hidden;
+}
+
+#post-info-section {
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
 }
