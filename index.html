@@ -12,7 +12,6 @@
     <script defer src="/static/all.js"></script>
   </head>
   <body>
-      {% verbatim %}
       <div id="post-info-section">
         <div id="heart-parent" v-on:click="toogle_heart">
           <div v-bind:class="class_name"></div>
@@ -20,7 +19,6 @@
         <button v-if="show_post_button" id="post-public-button" v-on:click="post_document">PUBLISH</button>
         <div v-else id="peer-info">{{num_peers}} <i class="fas fa-users"></i></div>  
       </div>
-      {% endverbatim %}
     <article>
       <div class="standalone-container">
           <div id="editor"></div>
