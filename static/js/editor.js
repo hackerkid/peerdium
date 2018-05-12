@@ -136,7 +136,7 @@ var editor = new Vue({
     mounted() {
         var toolbarOptions = {
             container: [
-              [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+              [{ 'header': [1, 2, 3, 4, false] }],
               ['bold', 'italic', 'underline', 'strike'],
               ['blockquote', 'code-block'],
               [{ 'color': [] }, { 'background': [] }],
@@ -154,11 +154,9 @@ var editor = new Vue({
               "emoji-toolbar": true,
               "emoji-shortname": true,
             },
-            placeholder: 'Compose an epic...',
             theme: 'bubble',
           });
 
-    
         const local_content = get_local_decrypted_content();
         if (local_content) {
             var object = JSON.parse(local_content);

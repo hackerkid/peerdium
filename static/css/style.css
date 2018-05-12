@@ -1,10 +1,7 @@
-p {
-    font-size: 18px;
-}
-
 body {
-    color: black;
-    font-family: CustomSerif,Georgia,Cambria,'Times New Roman',serif;
+    color: #333;
+    font-family: Georgia, serif;
+    line-height: 1.4em;
 }
 
 .fa-heart {
@@ -12,7 +9,7 @@ body {
 }
 
 article {
-    max-width: 800px;
+    max-width: 900px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -46,17 +43,47 @@ article {
 }
 
 .standalone-container {
-    margin: 50px auto;
-    max-width: 720px;
+    margin-left: 50px auto;
+    max-width: 900px;
 }
   
 .ql-editor {
-    height: 100%;
     overflow: hidden;
+    height: auto;
 }
 
+.ql-bubble .ql-editor h1 {
+    font-size: 40px;
+    line-height: 42px;
+}
+
+.ql-bubble .ql-editor h2 {
+    font-size:  36px;
+    line-height: 38px;
+}
+
+.ql-bubble .ql-editor h3 {
+    font-size:  30px;
+    line-height: 32px;
+}
+
+.ql-bubble .ql-editor h4 {
+    font-size:  24px;
+    line-height: 26px;
+}
+
+.ql-bubble .ql-editor p {
+    font-size: 18px;
+}
+
+
 #post-info-section {
-    max-width: 800px;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.ql-bubble .ql-editor img {
     margin-left: auto;
     margin-right: auto;
 }
