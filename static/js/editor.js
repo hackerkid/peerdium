@@ -136,7 +136,7 @@ var editor = new Vue({
     mounted() {
         var toolbarOptions = {
             container: [
-              [{ 'header': [1, 2, 3, 4, false] }],
+              [{ 'header': [1, 2, 3, false] }],
               ['bold', 'italic', 'underline', 'strike'],
               ['blockquote', 'code-block'],
               [{ 'color': [] }, { 'background': [] }],
