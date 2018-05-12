@@ -43,7 +43,7 @@ article {
 }
 
 .standalone-container {
-    margin-left: 50px auto;
+    margin-left: 50px;
     max-width: 900px;
 }
   
@@ -81,6 +81,7 @@ article {
     max-width: 900px;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 20px;
 }
 
 .ql-bubble .ql-editor img {
