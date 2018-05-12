@@ -134,9 +134,29 @@ var post_info = new Vue({
 var editor = new Vue({
     el: "#editor",
     mounted() {
-        quill = new Quill('#editor', {
+        var toolbarOptions = {
+            container: [
+              [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+              ['bold', 'italic', 'underline', 'strike'],
+              ['blockquote', 'code-block'],
+              [{ 'color': [] }, { 'background': [] }],
+              [{ 'align': [] }],
+              ['emoji'],
+              ['link', 'image']
+            ],
+            handlers: {
+              'emoji': function () {}
+            }
+          }
+          quill = new Quill('#editor', {
+            modules: {
+              "toolbar": toolbarOptions,
+              "emoji-toolbar": true,
+              "emoji-shortname": true,
+            },
+            placeholder: 'Compose an epic...',
             theme: 'bubble',
-        });
+          });
 
     
         const local_content = get_local_decrypted_content();
