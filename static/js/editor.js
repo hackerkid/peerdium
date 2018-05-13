@@ -152,7 +152,7 @@ var editor = new Vue({
             ]
           }
 
-          placeholder = "Start writing. Select the text for formatting options."
+          placeholder = "Start writing.\n\nSelect the text for formatting options."
           quill = new Quill('#editor', {
             modules: {
                 "toolbar": toolbarOptions,
