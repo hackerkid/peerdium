@@ -167,7 +167,7 @@ var editor = new Vue({
             quill.setContents(object);
             post_info.class_name = "fas fa-heart";
             quill.enable(false);
-            quill.placeholder(null);
+            quill.setText("Loading from peers.......");
 
             var encrypted_string = get_local_encrypted_content();
             var f = new File([encrypted_string], file_name);
@@ -179,7 +179,7 @@ var editor = new Vue({
             var json_file;
             if (magnet_link) {
                 quill.enable(false);
-                quill.placeholder(null);
+                quill.setText("Loading from peers.......");
                 post_info.class_name = "far fa-heart";
                 post_info.show_post_button = false;
                 client.add(magnet_link, function (torrent) {
