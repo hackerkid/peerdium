@@ -168,7 +168,6 @@ var editor = new Vue({
             quill.setContents(object);
             post_info.class_name = "fas fa-heart";
             quill.enable(false);
-            quill.setText("Loading from peers.......");
 
             var encrypted_string = get_local_encrypted_content();
             var f = new File([encrypted_string], file_name);
