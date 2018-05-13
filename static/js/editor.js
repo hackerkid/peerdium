@@ -3,7 +3,6 @@ var quill;
 var rtcConfig = {
     iceServers: [
       {"url":"turn:159.89.146.162","username":"peerdium","credential":"peerdium"},
-      { "url": 'stun:23.21.150.121' },
     ]
 }
 var client = new WebTorrent({
