@@ -14,7 +14,7 @@
   </head>
   <body>
       <div id="post-info-section">
-        <div id="heart-parent" v-on:click="toogle_heart">
+        <div title="Hearted posts would be stored in browser and can be viewed even if no one else is sharing them" id="heart-parent" v-on:click="toogle_heart">
           <div v-bind:class="class_name"></div>
         </div>
         <button v-if="show_post_button" id="post-public-button" v-on:click="post_document">PUBLISH</button>
