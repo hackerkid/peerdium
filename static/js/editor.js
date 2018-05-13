@@ -155,6 +155,8 @@ var editor = new Vue({
               'emoji': function () {}
             }
           }
+
+          placeholder = "Start writing. Select the text for formatting options."
           quill = new Quill('#editor', {
             modules: {
               "toolbar": toolbarOptions,
@@ -162,6 +164,7 @@ var editor = new Vue({
               "emoji-shortname": true,
             },
             theme: 'bubble',
+            placeholder: placeholder,
           });
 
         const local_content = get_local_decrypted_content();
