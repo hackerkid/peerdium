@@ -18,14 +18,14 @@ Setting up peerdium development environment is quite easy. There is no backend i
 
 Install nginx
 
-```
+```bash
 sudo apt-get update
 sudo apt-get install nginx
 ```
 
 Now clone the peerdium repository to `/var/www/` folder by doing these commands.You can clone this anywhere but if you don't have much experience with linux or command line just follow these steps.
 
-```
+```bash
 cd /var/www/
 git clone https://github.com/hackerkid/peerdium
 ```
