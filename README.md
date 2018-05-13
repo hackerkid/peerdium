@@ -3,8 +3,10 @@
 Peerdium is a peer to peer publishing platform. The posts are stored as torrents
 in the browser. Only the people with link to the post can see the content of the
 post.
+![image](https://i.giphy.com/media/xUPGGCECc3CA4zEFsA/source.gif)
 
 ## How it works?
+
 When the publish button is clicked the browser encrypts the post using a random 15 digit key, creates a torrent and starts seeding the torrent.  Each post has a URL in the format https://peerdium.com/post_id. The first 40 characters of the post_id is the magnet URI of the torrent and the rest 15 is the key used for encrypting the content of the torrent. When someone open a post for the first time the magnet URI encoded in the link is used for fetching the torrent from other seeders and the key is used for decrypting the torrent.
 
 Click on the heart button If you like a post and want to to access it later. The post would be saved to your browser and you can see the content of the post even if no one else is seeding.
