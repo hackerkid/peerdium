@@ -72,10 +72,9 @@ article {
     line-height: 26px;
 }
 
-.ql-bubble .ql-editor p {
+.ql-bubble .ql-editor * {
     font-size: 18px;
 }
-
 
 #post-info-section {
     max-width: 900px;
@@ -87,4 +86,10 @@ article {
 .ql-bubble .ql-editor img {
     margin-left: auto;
     margin-right: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+a {
+    color: #333;
 }
