@@ -164,6 +164,7 @@ var editor = new Vue({
         const local_content = get_local_decrypted_content();
         if (local_content) {
             var object = JSON.parse(local_content);
+            quill.setText("Loading from local storage.......");
             quill.setContents(object);
             post_info.class_name = "fas fa-heart";
             quill.enable(false);
