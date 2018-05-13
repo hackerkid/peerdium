@@ -91,7 +91,7 @@ function get_random_key() {
     var text = "";
     var possible = "abcdefghijklmnopqrstuvwxyz0123456789";
     
-    for (var i = 0; i < 10; i++)
+    for (var i = 0; i < 15; i++)
         text += possible.charAt(Math.floor(Math.random() * possible.length));
     
     return text;
