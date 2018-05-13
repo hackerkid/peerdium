@@ -143,25 +143,19 @@ var editor = new Vue({
     mounted() {
         var toolbarOptions = {
             container: [
-              [{ 'header': [1, 2, 3, false] }],
+              [{ 'header': 1 }, { 'header': 2 }],
               ['bold', 'italic', 'underline', 'strike'],
               ['blockquote', 'code-block'],
-              [{ 'color': [] }, { 'background': [] }],
-              [{ 'align': [] }],
-              ['emoji'],
+              [{ 'color': [] }],
+              [{ 'list': 'bullet' }],
               ['link', 'image']
-            ],
-            handlers: {
-              'emoji': function () {}
-            }
+            ]
           }
 
           placeholder = "Start writing. Select the text for formatting options."
           quill = new Quill('#editor', {
             modules: {
-              "toolbar": toolbarOptions,
-              "emoji-toolbar": true,
-              "emoji-shortname": true,
+                "toolbar": toolbarOptions,
             },
             theme: 'bubble',
             placeholder: placeholder,
