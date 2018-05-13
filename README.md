@@ -1,4 +1,3 @@
-# Peerdium
 <img src="static/images/peerdium2.png">
 
 Peerdium is a peer to peer publishing platform. The posts are stored as torrents
