@@ -198,7 +198,7 @@ var editor = new Vue({
 
                         var interval = setInterval(function () {
                             post_info.num_peers = torrent.numPeers;
-                        }, 1000)
+                        }, 2000)
                     })
                 });
             } else {
