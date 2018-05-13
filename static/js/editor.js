@@ -1,6 +1,16 @@
 const localstorage_available = typeof (Storage) !== "undefined";
 var quill;
-var client = new WebTorrent();
+var rtcConfig = {
+    iceServers: [
+      {"url":"turn:159.89.146.162","username":"peerdium","credential":"peerdium"}
+    ]
+}
+var client = new WebTorrent({
+    tracker: {
+      rtcConfig: rtcConfig
+    }
+});
+
 var encryped_content;
 
 function get_info_hash_from_url() {
