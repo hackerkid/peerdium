@@ -1,5 +1,5 @@
 # Peerdium
-<img src="static/images/peerdium.png" width="80px">
+<img src="static/images/peerdium2.png">
 
 Peerdium is a peer to peer publishing platform. The posts are stored as torrents
 in the browser. Only the people with link to the post can see the content of the
