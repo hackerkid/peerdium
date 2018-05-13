@@ -110,11 +110,8 @@ var post_info = new Vue({
             var stringified_content = JSON.stringify(content);
             var key = get_random_key();
             var encrypted_string =  CryptoJS.AES.encrypt(stringified_content, key);
-            console.log("first encrypted string " + encrypted_string);
-            console.log("first encrypted file name " + file_name);
             var f = new File([encrypted_string], file_name);
             client.seed(f, function (torrent) {
-                console.log('Client is seeding from editor' + torrent.infoHash);
                 const new_info_hash = torrent.infoHash;
                 var url = new_info_hash + key;
                 history.pushState(null, '', url);
@@ -175,14 +172,8 @@ var editor = new Vue({
             quill.enable(false);
             var encrypted_string = get_local_encrypted_content();
             var f = new File([encrypted_string], file_name);
-            console.log("--------------")
-            console.log(encrypted_string + " enc")
-            console.log(file_name + " filename")
-            console.log(local_content)
-            console.log("----------------")
             post_info.show_post_button = false;
             client.seed(f, function (torrent) {
-                console.log('Client is seeding from local storage ' + torrent.infoHash);
                 peer_info_updater(torrent);
             });
         } else {
@@ -191,9 +182,7 @@ var editor = new Vue({
                 quill.enable(false);
                 post_info.class_name = "far fa-heart";
                 post_info.show_post_button = false;
-                console.log(magnet_link)
                 client.add(magnet_link, function (torrent) {
-                    console.log('Client is downloading:', torrent.infoHash)
                     torrent.files.forEach(function (file) {
                         var reader = new FileReader();
                         reader.addEventListener("loadend", function () {
@@ -208,7 +197,6 @@ var editor = new Vue({
                         });
 
                         var interval = setInterval(function () {
-                            console.log(torrent.numPeers);
                             post_info.num_peers = torrent.numPeers;
                         }, 4000)
                     })
