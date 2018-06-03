@@ -5,22 +5,18 @@ var rtcConfig = {
       {"url":"turn:159.89.146.162","username":"peerdium","credential":"peerdium"},
     ]
 }
-var client = new WebTorrent({
-    tracker: {
-      rtcConfig: rtcConfig
-    }
-});
+var client = new WebTorrent();
 
 var encryped_content;
 
 function get_info_hash_from_url() {
-    url = window.location.pathname.substring(1);
-    return url.slice(0, 40);
+    hash_value = window.location.hash;
+    return hash_value.slice(1, 41);
 }
 
 function get_key_from_url() {
-    url = window.location.pathname.substring(1);
-    return url.slice(40);
+    hash_value = window.location.hash;
+    return hash_value.slice(41);
 }
 
 const info_hash = get_info_hash_from_url();
@@ -114,7 +110,7 @@ var post_info = new Vue({
             client.seed(f, function (torrent) {
                 const new_info_hash = torrent.infoHash;
                 var url = new_info_hash + key;
-                history.pushState(null, '', url);
+                window.location.hash = url;
                 encryped_content = encrypted_string;
                 save_doc();
                 post_info.show_post_button = false;
