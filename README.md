@@ -3,8 +3,16 @@
 [![Buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/hackerkid)
 
 Peerdium is a peer to peer publishing platform. The posts are stored as torrents
-in the browser. Only the people with link to the post can see the content of the
-post.
+in the browser. Only the people with link to the post can see the content of the post.
+
+Peerdium is built using [WebTorrent](https://github.com/webtorrent/webtorrent).
+
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">✨ Really slick peer-to-peer publishing platform, powered by WebTorrent! Built by <a href="https://twitter.com/hackerkidx?ref_src=twsrc%5Etfw">@hackerkidx</a> Nice work! <a href="https://t.co/qV6fK5t0vz">https://t.co/qV6fK5t0vz</a></p>&mdash; WebTorrent (@WebTorrentApp) <a href="https://twitter.com/WebTorrentApp/status/1005586086754693120?ref_src=twsrc%5Etfw">June 9, 2018</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+Peerdium was [featured](https://news.ycombinator.com/item?id=17060272) in the front page of Hacker News. There was a lot of interesting discussions in the comment section and you should defintely check it out.
+
 
 ## How it works?
 
