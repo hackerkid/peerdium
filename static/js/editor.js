@@ -192,7 +192,7 @@ var editor = new Vue({
             }
         };
 
-        xhttp.open("GET", "http://young-sea-71500.herokuapp.com/", true);
+        xhttp.open("GET", "https://young-sea-71500.herokuapp.com/", true);
         xhttp.send();
 
         var toolbarOptions = {
