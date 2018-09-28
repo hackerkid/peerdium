@@ -1,11 +1,7 @@
 const localstorage_available = typeof (Storage) !== "undefined";
 var quill;
-var rtcConfig = {
-    iceServers: [
-      {"url":"turn:159.89.146.162","username":"peerdium","credential":"peerdium"},
-    ]
-}
-var client = new WebTorrent();
+
+var client;
 
 var encryped_content;
 
@@ -140,7 +136,15 @@ var editor = new Vue({
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
-                console.log(this.responseText);
+                response = JSON.parse(this.responseText);
+                var rtcConfig = {
+                    iceServers: response["ice_servers"]
+                }
+                client = new WebTorrent({
+                    tracker: {
+                        rtcConfig: rtcConfig
+                    }
+                });
                 
                 if (local_content) {
                     var object = JSON.parse(local_content);
@@ -188,7 +192,7 @@ var editor = new Vue({
             }
         };
 
-        xhttp.open("GET", "http://localhost:8000", true);
+        xhttp.open("GET", "http://young-sea-71500.herokuapp.com/", true);
         xhttp.send();
 
         var toolbarOptions = {
