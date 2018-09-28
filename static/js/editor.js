@@ -24,7 +24,7 @@ if (info_hash) {
 var file_name = "hooli";
 
 function is_published() {
-    return window.location.pathname.length >= 32;
+    return window.location.hash.length >= 32;
 }
 
 function get_local_decrypted_content() {
@@ -140,11 +140,34 @@ var editor = new Vue({
                 var rtcConfig = {
                     iceServers: response["ice_servers"]
                 }
+                console.log(rtcConfig);
                 client = new WebTorrent({
                     tracker: {
                         rtcConfig: rtcConfig
                     }
                 });
+
+                var toolbarOptions = {
+                    container: [
+                      [{ 'header': 1 }, { 'header': 2 }],
+                      ['bold', 'italic', 'underline', 'strike'],
+                      ['blockquote', 'code-block'],
+                      [{ 'color': [] }],
+                      [{ 'list': 'bullet' }],
+                      ['link', 'image']
+                    ]
+                  }
+        
+                  placeholder = "Start writing.\n\nSelect the text for formatting options."
+                  quill = new Quill('#editor', {
+                    modules: {
+                        "toolbar": toolbarOptions,
+                    },
+                    theme: 'bubble',
+                    placeholder: placeholder,
+                  });
+        
+                const local_content = get_local_decrypted_content();
                 
                 if (local_content) {
                     var object = JSON.parse(local_content);
@@ -195,27 +218,7 @@ var editor = new Vue({
         xhttp.open("GET", "https://young-sea-71500.herokuapp.com/", true);
         xhttp.send();
 
-        var toolbarOptions = {
-            container: [
-              [{ 'header': 1 }, { 'header': 2 }],
-              ['bold', 'italic', 'underline', 'strike'],
-              ['blockquote', 'code-block'],
-              [{ 'color': [] }],
-              [{ 'list': 'bullet' }],
-              ['link', 'image']
-            ]
-          }
-
-          placeholder = "Start writing.\n\nSelect the text for formatting options."
-          quill = new Quill('#editor', {
-            modules: {
-                "toolbar": toolbarOptions,
-            },
-            theme: 'bubble',
-            placeholder: placeholder,
-          });
-
-        const local_content = get_local_decrypted_content();
+        
 
 
     },
