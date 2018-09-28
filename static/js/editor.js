@@ -137,6 +137,60 @@ var post_info = new Vue({
 var editor = new Vue({
     el: "#editor",
     mounted() {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log(this.responseText);
+                
+                if (local_content) {
+                    var object = JSON.parse(local_content);
+                    quill.setText("Loading from local storage.......");
+                    quill.setContents(object);
+                    post_info.class_name = "fas fa-heart";
+                    quill.enable(false);
+        
+                    var encrypted_string = get_local_encrypted_content();
+                    var f = new File([encrypted_string], file_name);
+                    post_info.show_post_button = false;
+                    client.seed(f, function (torrent) {
+                        peer_info_updater(torrent);
+                    });
+                } else {
+                    var json_file;
+                    if (magnet_link) {
+                        quill.enable(false);
+                        quill.setText("Loading from peers.......");
+                        post_info.class_name = "far fa-heart";
+                        post_info.show_post_button = false;
+                        client.add(magnet_link, function (torrent) {
+                            torrent.files.forEach(function (file) {
+                                var reader = new FileReader();
+                                reader.addEventListener("loadend", function () {
+                                    encryped_content = reader.result;
+                                    var decrypted_content = CryptoJS.AES.decrypt(reader.result, get_key_from_url());
+                                    var object = JSON.parse(decrypted_content.toString(CryptoJS.enc.Utf8));
+                                    quill.setContents(object);
+                                });
+                
+                                file.getBlob(function (err, blob) {
+                                    reader.readAsText(blob);
+                                });
+        
+                                var interval = setInterval(function () {
+                                    post_info.num_peers = torrent.numPeers;
+                                }, 2000)
+                            })
+                        });
+                    } else {
+                        quill.focus();
+                    }
+                }
+            }
+        };
+
+        xhttp.open("GET", "http://localhost:8000", true);
+        xhttp.send();
+
         var toolbarOptions = {
             container: [
               [{ 'header': 1 }, { 'header': 2 }],
@@ -158,48 +212,7 @@ var editor = new Vue({
           });
 
         const local_content = get_local_decrypted_content();
-        if (local_content) {
-            var object = JSON.parse(local_content);
-            quill.setText("Loading from local storage.......");
-            quill.setContents(object);
-            post_info.class_name = "fas fa-heart";
-            quill.enable(false);
 
-            var encrypted_string = get_local_encrypted_content();
-            var f = new File([encrypted_string], file_name);
-            post_info.show_post_button = false;
-            client.seed(f, function (torrent) {
-                peer_info_updater(torrent);
-            });
-        } else {
-            var json_file;
-            if (magnet_link) {
-                quill.enable(false);
-                quill.setText("Loading from peers.......");
-                post_info.class_name = "far fa-heart";
-                post_info.show_post_button = false;
-                client.add(magnet_link, function (torrent) {
-                    torrent.files.forEach(function (file) {
-                        var reader = new FileReader();
-                        reader.addEventListener("loadend", function () {
-                            encryped_content = reader.result;
-                            var decrypted_content = CryptoJS.AES.decrypt(reader.result, get_key_from_url());
-                            var object = JSON.parse(decrypted_content.toString(CryptoJS.enc.Utf8));
-                            quill.setContents(object);
-                        });
-        
-                        file.getBlob(function (err, blob) {
-                            reader.readAsText(blob);
-                        });
 
-                        var interval = setInterval(function () {
-                            post_info.num_peers = torrent.numPeers;
-                        }, 2000)
-                    })
-                });
-            } else {
-                quill.focus();
-            }
-        }
     },
 });
