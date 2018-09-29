@@ -1,4 +1,4 @@
-<img src="static/images/peerdium2.png">
+<img src="static/images/peerdium_with_name.png">
 
 [![Buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/hackerkid)
 
