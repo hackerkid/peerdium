@@ -1,7 +1,5 @@
 <img src="static/images/peerdium_with_name.png">
 
-[![Buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/hackerkid)
-
 Peerdium is a peer to peer publishing platform. The posts are stored as torrents
 in the browser. Only the people with link to the post can see the content of the post. Peerdium is built using [WebTorrent](https://github.com/webtorrent/webtorrent).
 
