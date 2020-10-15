@@ -1,5 +1,12 @@
 <img src="static/images/peerdium_with_name.png">
 
+<h2  align="center">
+  🔥🔥
+  Check out my latest project - <a href="http://bit.ly/diff-peerdium">diff.blog</a>
+</h2>
+<br>
+
+
 Peerdium is a peer to peer publishing platform. The posts are stored as torrents
 in the browser. Only the people with link to the post can see the content of the post. Peerdium is built using [WebTorrent](https://github.com/webtorrent/webtorrent).
 
